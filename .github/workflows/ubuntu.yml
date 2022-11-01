@@ -1,4 +1,4 @@
-name: Non-Windows
+name: Ubuntu
 
 on:
   pull_request:
@@ -13,10 +13,7 @@ env:
 jobs:
   test:
     name: Test
-    strategy:
-      matrix:
-        image: [macos-latest, ubuntu-latest]
-    runs-on: ${{ matrix.image }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -25,13 +22,7 @@ jobs:
         run: rustup update --no-self-update stable
       - name: Add toolchain target
         run: rustup target add x86_64-pc-windows-gnu
-      - name: Install gcc-mingw-w64-x86-64
+      - name: Configure gnu
         run: sudo apt-get install -y gcc-mingw-w64-x86-64
-        if: startsWith(matrix.image, 'ubuntu-')
-      - name: Install mingw-w64
-        run: brew install mingw-w64
-        if: startsWith(matrix.image, 'macos-')
       - name: Build
-        shell: pwsh
-        run: |
-          cargo build --target x86_64-pc-windows-gnu
+        run: cargo build --target x86_64-pc-windows-gnu
