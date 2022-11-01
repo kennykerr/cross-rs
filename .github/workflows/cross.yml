@@ -1,0 +1,38 @@
+name: Non-Windows
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+env:
+  RUSTFLAGS: -Dwarnings
+  LLVM-MINGW-TOOLCHAIN-NAME: llvm-mingw-20220323-ucrt-ubuntu-18.04-x86_64
+
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        image: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.image }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Update toolchain
+        run: rustup update --no-self-update stable && rustup default stable-x86_64-pc-windows-gnu
+      - name: Add toolchain target
+        run: rustup target add x86_64-pc-windows-gnu
+      - name: Install gcc-mingw-w64-x86-64
+        run: sudo apt-get install -y gcc-mingw-w64-x86-64
+        if: startsWith(matrix.image, 'ubuntu-')
+      - name: Install mingw-w64
+        run: brew install mingw-w64
+        if: startsWith(matrix.image, 'macos-')
+
+      - name: Test
+        shell: pwsh
+        run: |
+          cargo build --target x86_64-pc-windows-gnu
