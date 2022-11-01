@@ -21,7 +21,7 @@ jobs:
         run: rustup update --no-self-update stable
       - name: Add toolchain target
         run: rustup target add x86_64-pc-windows-gnu
-      - name: Configure environment
+      - name: Configure gnu
         shell: pwsh
         run: |
           Add-Content $env:USERPROFILE\.cargo\config @"
