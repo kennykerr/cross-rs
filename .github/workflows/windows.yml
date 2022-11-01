@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Update toolchain
-        run: rustup update --no-self-update stable && rustup default stable-x86_64-pc-windows-gnu
+        run: rustup update --no-self-update stable
       - name: Add toolchain target
         run: rustup target add x86_64-pc-windows-gnu
       - name: Configure Cargo for GNU toolchain

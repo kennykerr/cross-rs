@@ -31,8 +31,7 @@ jobs:
       - name: Install mingw-w64
         run: brew install mingw-w64
         if: startsWith(matrix.image, 'macos-')
-
-      - name: Test
+      - name: Build
         shell: pwsh
         run: |
           cargo build --target x86_64-pc-windows-gnu
